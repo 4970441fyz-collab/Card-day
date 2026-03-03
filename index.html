@@ -7,14 +7,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
 <style>
   :root {
-  --bg: #f3ece2;
-  --ink: #1f1813;
-  --muted: #6f5f53;
-  --card-1: #d4c5b2;
-  --card-2: #bfc9c2;
-  --card-3: #c9bfc9;
-  --accent: #5c4330;
-  --glow: rgba(140,115,85,0.35);
+  --bg: #f7f3ec;
+  --ink: #15100c;
+  --muted: #4a3e35;
+  --card-1: #e0d4c2;
+  --card-2: #c5d1c9;
+  --card-3: #d6ccd9;
+  --accent: #36251a;
+  --glow: rgba(90,70,50,0.3);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -76,13 +76,13 @@
   }
 
   .eyebrow {
-    font-family: 'Jost', sans-serif;
-    font-weight: 200;
-    font-size: 0.65rem;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 0.8rem;
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 0.75rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 0.8rem;
   }
 
   h1 {
@@ -179,12 +179,12 @@
   }
 
   .card-subtitle {
-    font-size: 0.65rem;
-    font-weight: 200;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--accent);
-    opacity: 0.8;
+  font-size: 0.75rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 1;
   }
 
   /* SHUFFLE STATE */
@@ -247,10 +247,10 @@
   .card-detail p {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
-  font-size: 0.85rem;
-  line-height: 1.6;
+  font-size: 0.95rem;
+  line-height: 1.7;
   color: var(--ink);
-  opacity: 0.95;
+  opacity: 1;
   margin-top: 1rem;
   }
 
@@ -299,22 +299,22 @@
   .btn span { position: relative; z-index: 1; }
 
   .btn-reset {
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    color: var(--muted);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.3rem;
-    font-family: 'Jost', sans-serif;
-    transition: color 0.3s;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  color: var(--ink);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem;
+  font-family: 'Jost', sans-serif;
+  transition: color 0.3s;
   }
   .btn-reset:hover { color: var(--ink); }
   .btn-reset.hidden { opacity: 0; pointer-events: none; }
 
   .instruction {
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--ink);
   transition: opacity 0.4s;
@@ -325,22 +325,22 @@
   .result-label {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: var(--ink);
   opacity: 0;
   transition: opacity 0.5s ease 0.8s;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   }
   .result-label.show { opacity: 1; }
 
   footer {
-    position: fixed;
-    bottom: 1.5rem;
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    opacity: 0.5;
+  position: fixed;
+  bottom: 1.5rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.23em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0.85;
   }
 </style>
 </head>
