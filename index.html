@@ -7,14 +7,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f5f0e8;
-    --ink: #2a2420;
-    --muted: #9a8f85;
-    --card-1: #d4c5b2;
-    --card-2: #bfc9c2;
-    --card-3: #c9bfc9;
-    --accent: #7a6a5a;
-    --glow: rgba(180,160,130,0.3);
+  --bg: #f3ece2;
+  --ink: #1f1813;
+  --muted: #6f5f53;
+  --card-1: #d4c5b2;
+  --card-2: #bfc9c2;
+  --card-3: #c9bfc9;
+  --accent: #5c4330;
+  --glow: rgba(140,115,85,0.35);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -245,13 +245,13 @@
   }
 
   .card-detail p {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 0.85rem;
-    line-height: 1.6;
-    color: var(--ink);
-    opacity: 0.75;
-    margin-top: 1rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--ink);
+  opacity: 0.95;
+  margin-top: 1rem;
   }
 
   /* CONTROLS */
@@ -313,23 +313,23 @@
   .btn-reset.hidden { opacity: 0; pointer-events: none; }
 
   .instruction {
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    transition: opacity 0.4s;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink);
+  transition: opacity 0.4s;
   }
   .instruction.hidden { opacity: 0; }
 
   /* Picked message */
   .result-label {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 1rem;
-    color: var(--muted);
-    opacity: 0;
-    transition: opacity 0.5s ease 0.8s;
-    letter-spacing: 0.05em;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--ink);
+  opacity: 0;
+  transition: opacity 0.5s ease 0.8s;
+  letter-spacing: 0.05em;
   }
   .result-label.show { opacity: 1; }
 
