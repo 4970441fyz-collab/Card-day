@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Карта дня</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --ink: #2a2420;
+    --muted: #9a8f85;
+    --card-1: #d4c5b2;
+    --card-2: #bfc9c2;
+    --card-3: #c9bfc9;
+    --accent: #7a6a5a;
+    --glow: rgba(180,160,130,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Grain texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.6;
+  }
+
+  /* Soft radial bg */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -20%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(ellipse at 30% 20%, rgba(200,185,165,0.4) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(185,200,190,0.3) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 2rem;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .eyebrow {
+    font-family: 'Jost', sans-serif;
+    font-weight: 200;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.8rem;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
+  h1 em {
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  /* CARDS AREA */
+  .cards-stage {
+    position: relative;
+    width: 100%;
+    height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card {
+    position: absolute;
+    width: 200px;
+    height: 300px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease, opacity 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    user-select: none;
+    border: 1px solid rgba(255,255,255,0.6);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.25);
+    pointer-events: none;
+  }
+
+  .card-1 { background: linear-gradient(145deg, #ddd3c0, #c9b99e); }
+  .card-2 { background: linear-gradient(145deg, #cad5cd, #b4c4bb); }
+  .card-3 { background: linear-gradient(145deg, #d4cad8, #c0b4c8); }
+
+  /* Default stacked layout */
+  .card:nth-child(1) {
+    transform: translateX(-160px) rotate(-6deg);
+    box-shadow: -4px 8px 40px rgba(0,0,0,0.12);
+    z-index: 1;
+  }
+  .card:nth-child(2) {
+    transform: translateX(0px) rotate(0deg);
+    box-shadow: 0px 12px 50px rgba(0,0,0,0.15);
+    z-index: 3;
+  }
+  .card:nth-child(3) {
+    transform: translateX(160px) rotate(6deg);
+    box-shadow: 4px 8px 40px rgba(0,0,0,0.12);
+    z-index: 1;
+  }
+
+  .card:hover {
+    z-index: 10;
+  }
+  .card:nth-child(1):hover { transform: translateX(-160px) rotate(-3deg) translateY(-10px); }
+  .card:nth-child(2):hover { transform: translateX(0px) rotate(0deg) translateY(-10px); }
+  .card:nth-child(3):hover { transform: translateX(160px) rotate(3deg) translateY(-10px); }
+
+  .card-symbol {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+  }
+
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+
+  .card-subtitle {
+    font-size: 0.65rem;
+    font-weight: 200;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0.8;
+  }
+
+  /* SHUFFLE STATE */
+  .cards-stage.shuffling .card:nth-child(1) {
+    animation: shuffle1 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .cards-stage.shuffling .card:nth-child(2) {
+    animation: shuffle2 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s;
+  }
+  .cards-stage.shuffling .card:nth-child(3) {
+    animation: shuffle3 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s;
+  }
+
+  @keyframes shuffle1 {
+    0% { transform: translateX(-160px) rotate(-6deg); }
+    30% { transform: translateX(-80px) rotate(15deg) translateY(-40px); }
+    60% { transform: translateX(40px) rotate(-10deg) translateY(-20px); }
+    100% { transform: translateX(-160px) rotate(-6deg); }
+  }
+  @keyframes shuffle2 {
+    0% { transform: translateX(0) rotate(0deg); }
+    25% { transform: translateX(60px) rotate(-20deg) translateY(-50px); }
+    55% { transform: translateX(-50px) rotate(12deg) translateY(-15px); }
+    100% { transform: translateX(0) rotate(0deg); }
+  }
+  @keyframes shuffle3 {
+    0% { transform: translateX(160px) rotate(6deg); }
+    35% { transform: translateX(20px) rotate(-18deg) translateY(-35px); }
+    65% { transform: translateX(-30px) rotate(8deg) translateY(-10px); }
+    100% { transform: translateX(160px) rotate(6deg); }
+  }
+
+  /* REVEALED STATE */
+  .cards-stage.revealed .card {
+    transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .cards-stage.revealed .card:not(.chosen) {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(60px) scale(0.8) !important;
+  }
+  .cards-stage.revealed .card.chosen {
+    transform: translateX(0) rotate(0deg) scale(1.05) !important;
+    z-index: 20;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+  }
+
+  /* CHOSEN CARD INNER CONTENT */
+  .card-detail {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s ease 0.5s, max-height 0.5s ease 0.5s;
+  }
+  .card.chosen .card-detail {
+    opacity: 1;
+    max-height: 200px;
+  }
+
+  .card-detail p {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--ink);
+    opacity: 0.75;
+    margin-top: 1rem;
+  }
+
+  /* CONTROLS */
+  .controls {
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .btn {
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: transparent;
+    border: 1px solid rgba(122,106,90,0.35);
+    padding: 0.75rem 2.5rem;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+    border-radius: 100px;
+  }
+
+  .btn:hover {
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+  .btn:hover::before { transform: scaleX(1); }
+  .btn span { position: relative; z-index: 1; }
+
+  .btn-reset {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.3rem;
+    font-family: 'Jost', sans-serif;
+    transition: color 0.3s;
+  }
+  .btn-reset:hover { color: var(--ink); }
+  .btn-reset.hidden { opacity: 0; pointer-events: none; }
+
+  .instruction {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: opacity 0.4s;
+  }
+  .instruction.hidden { opacity: 0; }
+
+  /* Picked message */
+  .result-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--muted);
+    opacity: 0;
+    transition: opacity 0.5s ease 0.8s;
+    letter-spacing: 0.05em;
+  }
+  .result-label.show { opacity: 1; }
+
+  footer {
+    position: fixed;
+    bottom: 1.5rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="eyebrow">практика осознанности</div>
+    <h1>Карта <em>дня</em></h1>
+  </header>
+
+  <div class="cards-stage" id="stage">
+    <div class="card card-1" data-index="0" onclick="pickCard(0)">
+      <div class="card-symbol">◯</div>
+      <div class="card-title">Открытость</div>
+      <div class="card-subtitle">ACT · принятие</div>
+      <div class="card-detail">
+        <p>Позволь этому дню быть таким, какой он есть. Без борьбы с тем, что невозможно изменить прямо сейчас.</p>
+      </div>
+    </div>
+
+    <div class="card card-2" data-index="1" onclick="pickCard(1)">
+      <div class="card-symbol">△</div>
+      <div class="card-title">Осознанность</div>
+      <div class="card-subtitle">ACT · присутствие</div>
+      <div class="card-detail">
+        <p>Замедлись. Что ты замечаешь прямо сейчас — в теле, в мыслях, вокруг? Просто наблюдай, не оценивая.</p>
+      </div>
+    </div>
+
+    <div class="card card-3" data-index="2" onclick="pickCard(2)">
+      <div class="card-symbol">✦</div>
+      <div class="card-title">Вовлечённость</div>
+      <div class="card-subtitle">ACT · ценности</div>
+      <div class="card-detail">
+        <p>Что для тебя важно сегодня? Сделай один маленький шаг в сторону того, что по-настоящему имеет значение.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <p class="instruction" id="instruction">нажми на карту или перемешай</p>
+    <p class="result-label" id="resultLabel">твоя карта дня</p>
+    <button class="btn" id="shuffleBtn" onclick="shuffle()">
+      <span>✦ &nbsp; Перемешать</span>
+    </button>
+    <button class="btn-reset hidden" id="resetBtn" onclick="reset()">начать заново</button>
+  </div>
+</div>
+
+<footer>карта дня · практика</footer>
+
+<script>
+  let isShuffling = false;
+  let isRevealed = false;
+
+  function shuffle() {
+    if (isShuffling || isRevealed) return;
+    isShuffling = true;
+
+    const stage = document.getElementById('stage');
+    stage.classList.add('shuffling');
+
+    // After animation, pick random card automatically
+    setTimeout(() => {
+      stage.classList.remove('shuffling');
+      isShuffling = false;
+      // auto-pick after shuffle
+      const random = Math.floor(Math.random() * 3);
+      setTimeout(() => pickCard(random), 200);
+    }, 1000);
+  }
+
+  function pickCard(index) {
+    if (isShuffling || isRevealed) return;
+    isRevealed = true;
+
+    const stage = document.getElementById('stage');
+    const cards = stage.querySelectorAll('.card');
+    const instruction = document.getElementById('instruction');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const resultLabel = document.getElementById('resultLabel');
+
+    cards[index].classList.add('chosen');
+    stage.classList.add('revealed');
+
+    instruction.classList.add('hidden');
+    shuffleBtn.style.display = 'none';
+    resetBtn.classList.remove('hidden');
+    resultLabel.classList.add('show');
+  }
+
+  function reset() {
+    isRevealed = false;
+    isShuffling = false;
+
+    const stage = document.getElementById('stage');
+    const cards = stage.querySelectorAll('.card');
+    const instruction = document.getElementById('instruction');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const resultLabel = document.getElementById('resultLabel');
+
+    cards.forEach(c => c.classList.remove('chosen'));
+    stage.classList.remove('revealed', 'shuffling');
+
+    instruction.classList.remove('hidden');
+    shuffleBtn.style.display = '';
+    resetBtn.classList.add('hidden');
+    resultLabel.classList.remove('show');
+  }
+</script>
+</body>
+</html>
